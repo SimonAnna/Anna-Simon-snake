@@ -1,3 +1,6 @@
+/**/
+
+
 var snake;
 var snakeLength;
 var snakeSize;
@@ -6,10 +9,12 @@ var context;
 var screenWidth;
 var screenHeight;
 
-
+/*start calling functions*/
 gameInitialize();
+snakeInitialize();
 gameDraw();
-
+snakeDraw();
+/*endd calling functions*/
 function gameInitialize(){
    var canvas=document.getElementById("game-screen");
    context = canvas.getContext("2d");
@@ -20,7 +25,7 @@ function gameInitialize(){
    canvas.width = screenWidth;
    canvas.height = screenHeight;
 }
-
+/*draw functions"draw it" and update functions update it*/
 function gameLoop(){
     
 }
@@ -31,15 +36,31 @@ function gameDraw(){
 }
 
 function snakeInitialize(){
+    /*[] is an array and helps keep multiple variables*/
     snake= [];
-    snakeLength = 15;
-    snakeSize = 20;
+    snakeLength = 5;
+    snakeSize = 25;
+    /*part 1:setting up a counting number, part2:when to stop the for loop, part 3:how you change the counting number*/
+    for( var index=snakeLength - 1; index >=0; index-- ){
+    snake.push( {       
+       x:index,
+       y:0  
+     });    
+    }
 }
-
+/*draws the snake*/
 function snakeDraw(){
-    
+   for(var index =0; index < snake.length; index++ ) {   
+       context.fillStyle= "black";
+       context.fillRect(snake[index].x * snakeSize,snake[index].y * snakeSize, snakeSize, snakeSize );
+   } 
 }
-
+/*helps move the snake*/
 function snakeUpdate(){
-    
+  var snakeHeadX = snake[0].x;
+  var snakeHeadY = snake[0].x;
+  
+  snakeHeeadX++;
+  
+  var snakeTail = sanke.pop();
 }

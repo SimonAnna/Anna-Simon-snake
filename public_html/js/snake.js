@@ -1,9 +1,11 @@
-/**/
-
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * variables
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 var snake;
 var snakeLength;
 var snakeSize;
+var snakeDirection;
 
 var food;
 
@@ -11,12 +13,16 @@ var context;
 var screenWidth;
 var screenHeight;
 
-/*start calling functions*/
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ *executing game code 
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 gameInitialize();
 snakeInitialize();
 foodInitialize();
 setInterval(gameLoop, 1000/25);
-/*end calling functions*/
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * Game functions
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 function gameInitialize(){
    var canvas=document.getElementById("game-screen");
    context = canvas.getContext("2d");
@@ -26,6 +32,8 @@ function gameInitialize(){
    
    canvas.width = screenWidth;
    canvas.height = screenHeight;
+   
+   document.addEventListener("keydown", keyboardHandler);
 }
 /*draw functions"draw it" and update functions update it*/
 function gameLoop(){
@@ -39,12 +47,15 @@ function gameDraw(){
     context.fillStyle = "rgb(160,232,165)";
     context.fillRect(0, 0, screenWidth, screenHeight);
 }
-
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ *Snake Functions 
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 function snakeInitialize(){
     /*[] is an array and helps keep multiple variables*/
     snake= [];
     snakeLength = 5;
     snakeSize = 25;
+    snakeDirection = "down";
     /*part 1:setting up a counting number, part2:when to stop the for loop, part 3:how you change the counting number*/
     for( var index=snakeLength - 1; index >=0; index-- ){
     snake.push( {       
@@ -65,7 +76,19 @@ function snakeUpdate(){
   var snakeHeadX = snake[0].x;
   var snakeHeadY = snake[0].y;
   
-  snakeHeadX++;
+   if(snakeDirection == "down") {
+      snakeHeadY++; 
+   }
+   else if(snakeDirection == "right"){
+       snakeHeadX++;
+   }
+   else if(snakeDirection == "up"){
+       snakeHeadY--;
+   }
+   else if(snakeDirection == "left"){
+       snakeHeadX--;
+   }
+   
   
   var snakeTail = snake.pop();
   snakeTail.x = snakeHeadX;
@@ -73,15 +96,48 @@ function snakeUpdate(){
   snake.unshift(snakeTail);
   
 }
-
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * Food Functions
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 function foodInitialize(){
     food = {
         x:0,
         y:0
     };
+    setFoodPosition();
 }
 
 function foodDraw(){
     context.fillStyle = "black";
-    context.fillRect(food.x, food.y, snakeSize, snakeSize);
+    context.fillRect(food.x * snakeSize, food.y * snakeSize, snakeSize, snakeSize);
 }
+
+function setFoodPosition(){
+    var randomX = Math.floor(Math.random() * screenWidth);
+    var randomY = Math.floor(Math.random() * screenHeight);
+    
+    food.x = Math.floor(randomX / snakeSize);
+    food.y = Math.floor(randomY / snakeSize);
+}
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * Imput Functions
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+function keyboardHandler(event){
+   console.log(event);
+   
+   if(event.keyCode == "39" && snakeDirection !="left") {
+      snakeDirection = "right"; 
+   }
+   else if(event.keyCode == "40" && snakeDirection !="up"){
+        snakeDirection = "down";  
+   }
+   else if(event.keyCode == "38" && snakeDirection !="down"){
+        snakeDirection = "up";  
+   }
+   else if(event.keyCode == "37"  && snakeDirection !="right"){
+        snakeDirection = "left";  
+   }
+ }
+ /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * Collision handling
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/

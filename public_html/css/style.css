@@ -7,7 +7,31 @@ body {
     display: block;
 }
 
-#gameOver {
+#gameOver, #playHUD {
     position: absolute; 
     visibility: hidden;
+    width: 580px;
 }
+
+h1,h2, h3{
+    font-family: 'Sonsie One', cursive;
+    text-align: center;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.title{
+    font-size: 62px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+#restartButton {
+    border: 5px groove black;
+    border-radius: 10px;
+}
+
+#restartButton:hover{
+    background-color: darkseagreen;
+}
+

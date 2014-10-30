@@ -15,6 +15,7 @@ var screenHeight;
 
 var gameState;
 var gameOverMenu;
+var restartButton;
 
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  *executing game code 
@@ -39,6 +40,10 @@ function gameInitialize() {
     document.addEventListener("keydown", keyboardHandler);
 
     gameOverMenu = document.getElementById("gameOver");
+    centerMenuPosition(gameOverMenu);
+
+    restartButton = document.getElementById("restartButton");
+    restartButton.addEventListener("click", gameRestart);
 
     setState("PLAY");
 }
@@ -55,6 +60,13 @@ function gameLoop() {
 function gameDraw() {
     context.fillStyle = "rgb(160,232,165)";
     context.fillRect(0, 0, screenWidth, screenHeight);
+}
+
+function gameRestart() {
+    snakeInitialize();
+    foodInitialize();
+    hiddenMenu(gameOverMenu);
+    setState("PLAY");
 }
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  *Snake Functions 
@@ -100,6 +112,7 @@ function snakeUpdate() {
 
     checkFoodCollisions(snakeHeadX, snakeHeadY);
     checkWallCollision(snakeHeadX, snakeHeadY);
+    checkSnakeCollision(snakeHeadX, snakeHeadY);
 
     var snakeTail = snake.pop();
     snakeTail.x = snakeHeadX;
@@ -167,8 +180,17 @@ function checkFoodCollisions(snakeHeadX, snakeHeadY) {
 function checkWallCollision(snakeHeadX, snakeHeadY) {
     if (snakeHeadX * snakeSize >= screenWidth || snakeHeadX * snakeSize < 0 ||
             snakeHeadY * snakeSize >= screenHeight || snakeHeadY * snakeSize < 0
-            ) 
+            )
         setState("GAME OVER");
+}
+
+function checkSnakeCollision(snakeHeadX, snakeHeadY) {
+    for(var index = 1; index<snake.length; index++){
+        if(snakeHeadX == snake[index].x && snakeHeadY == snake[index].y){
+            setState("GAME OVER");
+            return;
+        }
+    }
 }
 
 
@@ -181,12 +203,27 @@ function setState(state) {
     showMenu(state);
 }
 
+/*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+ * menu functions
+ @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+
 function displayMenu(menu) {
     menu.style.visibility = "visible";
 }
 
+function hiddenMenu(menu) {
+    menu.style.visibility = "hidden";
+}
+
 function showMenu(state) {
-    if(state == "GAME OVER"){
+    if (state == "GAME OVER") {
         displayMenu(gameOverMenu);
     }
+}
+
+function centerMenuPosition(menu) {
+    console.log(menu.offsetWidth + " " + screenWidth);
+    menu.style.top = (screenHeight / 2) - (menu.offsetHeight / 2) + "px";
+    menu.style.left = (screenWidth / 2) - (menu.offsetWidth / 2) + "px";
 }

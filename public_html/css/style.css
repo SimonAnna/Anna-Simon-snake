@@ -7,10 +7,14 @@ body {
     display: block;
 }
 
-#gameOver, #playHUD {
+#gameOver {
     position: absolute; 
     visibility: hidden;
     width: 580px;
+}
+#playHUD {
+    position: absolute; 
+    visibility: hidden;
 }
 
 h1,h2, h3{
@@ -35,3 +39,6 @@ h1,h2, h3{
     background-color: darkseagreen;
 }
 
+#scoreboard {
+    margin: 0px;
+}

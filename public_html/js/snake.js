@@ -16,6 +16,8 @@ var screenHeight;
 var gameState;
 var gameOverMenu;
 var restartButton;
+var playHUD;
+var scoreboard;
 
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
  *executing game code 
@@ -45,11 +47,15 @@ function gameInitialize() {
     restartButton = document.getElementById("restartButton");
     restartButton.addEventListener("click", gameRestart);
 
+    playHUD = document.getElementById("playHUD");
+    scoreboard = document.getElementById("scoreboard");
+
     setState("PLAY");
 }
 /*draw functions"draw it" and update functions update it*/
 function gameLoop() {
     gameDraw();
+    drawScoreBoard();
     if (gameState == "PLAY") {
         snakeUpdate();
         snakeDraw();
@@ -185,8 +191,8 @@ function checkWallCollision(snakeHeadX, snakeHeadY) {
 }
 
 function checkSnakeCollision(snakeHeadX, snakeHeadY) {
-    for(var index = 1; index<snake.length; index++){
-        if(snakeHeadX == snake[index].x && snakeHeadY == snake[index].y){
+    for (var index = 1; index < snake.length; index++) {
+        if (snakeHeadX == snake[index].x && snakeHeadY == snake[index].y) {
             setState("GAME OVER");
             return;
         }
@@ -220,10 +226,17 @@ function showMenu(state) {
     if (state == "GAME OVER") {
         displayMenu(gameOverMenu);
     }
+    else if (state == "PLAY") {
+        displayMenu(playHUD);
+    }
 }
 
 function centerMenuPosition(menu) {
     console.log(menu.offsetWidth + " " + screenWidth);
     menu.style.top = (screenHeight / 2) - (menu.offsetHeight / 2) + "px";
     menu.style.left = (screenWidth / 2) - (menu.offsetWidth / 2) + "px";
+}
+
+function drawScoreBoard() {
+    scoreboard.innerHTML = "Length: " + snakeLength;
 }
